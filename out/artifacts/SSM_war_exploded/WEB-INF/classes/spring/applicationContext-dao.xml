@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		">
+
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="driverClass" value="com.mysql.jdbc.Driver"></property>
+        <property name="jdbcUrl" value="jdbc:mysql://39.105.218.121:3306/ssm?characterEncoding=utf-8"></property>
+        <property name="user" value="root"></property>
+        <property name="password" value=""></property>
+        <property name="initialPoolSize" value="50"></property>
+        <property name="maxPoolSize" value="200"></property>
+        <property name="minPoolSize" value="50"></property>
+    </bean>
+
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--指定Mapper配置文件的路径-->
+       <property name="mapperLocations" value="classpath:mybatis-mapper/cn/dazky/dao/*.xml"></property>
+        <property name="configLocation" value="classpath:mybatis/SqlMapConfig.xml" />
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!-- 批量扫描：从Mapper包中扫描出Mapper接口，自动创建代理对象并且在spring容器中注册
+    遵循规范：将XXXMapper.java和XXXMapper.xml映射文件名称保持一致，并且在同一目录下
+    自动扫描出来的Mapper的bean的id为XXXMapper.java的类名(首字母小写) -->
+        <property name="basePackage" value="cn.dazky.dao"/>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+    </bean>
+
+</beans>
